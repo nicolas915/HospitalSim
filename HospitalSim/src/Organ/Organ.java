@@ -1,38 +1,63 @@
 package Organ;
 
 import java.util.Random;
-public class Organ implements IOrgan{
+import java.util.Timer;
+import java.util.TimerTask;
 
-    private Random rand = new Random();
-    private static final int FRESH = 0;
-    private static final int DAMAGED = 1;
-    private static final int ROTTEN = 2;
+import People.Patient;
 
-    private String name;
-    private int state;
+public class Organ implements IOrgan, Runnable {
 
-    public Organ(String name, int state){
-        this.name = name;
-        this.state = state;
-    }
+	private Random rand = new Random();
+	public static final int FRESH = 0;
+	public static final int DAMAGED = 1;
+	public static final int ROTTEN = 2;
 
-    public String getName(){return this.name;}
-    public int getState(){return this.state;}
-    public void setState(int state){
-        this.state = state;
-    }
+	private String name;
+	private int state;
 
-    public void lifeCycleOrgan(){
-        if(this.state == DAMAGED){
-            if(rand.nextInt(10)>7){
-                this.setState(ROTTEN);
-            }
-        }
-        if(this.state == FRESH){
-            if(rand.nextInt(10)>7){
-                this.setState(DAMAGED);
-            }
-        }
-    }
+	public Organ(String name, int state) {
+		this.name = name;
+		this.state = state;
+	}
 
+	public String getName() {
+		return this.name;
+	}
+
+	public int getState() {
+		return this.state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
+	public void lifeCycleOrgan() {
+		if (this.state == DAMAGED) {
+			if (rand.nextInt(10) > 7) {
+				this.setState(ROTTEN);
+			}
+		}
+		if (this.state == FRESH) {
+			if (rand.nextInt(10) > 7) {
+				this.setState(DAMAGED);
+			}
+		}
+	}
+
+	@Override
+	public void run() {
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			public void run() {
+				lifeCycleOrgan();
+				System.out.println(getName() + " est dans l'état : " + getState() + "\n\n");
+				if (getState() == Organ.ROTTEN) {
+					timer.cancel();
+				}
+			}
+		}, 0, 1000);
+
+	}
 }

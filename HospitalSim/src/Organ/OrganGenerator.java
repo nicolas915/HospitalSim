@@ -7,7 +7,7 @@ public class OrganGenerator{
 
     private Random rand = new Random();
 
-    public IOrgan createPatient(){
+    public IOrgan createOrgan(){
         IOrgan o = new Organ(organ[rand.nextInt(organ.length)], rand.nextInt(0,3));
         return o;
     }
