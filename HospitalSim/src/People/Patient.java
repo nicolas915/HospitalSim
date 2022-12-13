@@ -13,6 +13,7 @@ public class Patient implements IPatient, Runnable {
 	public static final int MEDIUMILL = 2;
 	public static final int HIGHILL = 3;
 	public static final int DEAD = 4;
+	
 	private String name;
 	private String waitedOrgan;
 	private int vitalSign;
@@ -74,12 +75,18 @@ public class Patient implements IPatient, Runnable {
 		timer.schedule(new TimerTask() {
 			public void run() {
 				lifeCyclePatient();
-				System.out.println(getName() + "\nEtat de santé : " + getVitalSign() + "\n\n");
+				//System.out.println(getName() + "\nEtat de santé : " + getVitalSign() + "\n\n");
 				if (getVitalSign() == Patient.DEAD) {
-					System.out.println(getName() + " est mort\n\n");
 					timer.cancel();
 				}
 			}
 		}, 0, 2000);
 	}
+
+	@Override
+	public String toString() {
+		return "Patient [\tname=" + String.format("%12s", name) + "\twaitedOrgan=" + waitedOrgan + "]";
+	}
+	
+	
 }

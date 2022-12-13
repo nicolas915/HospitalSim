@@ -4,8 +4,6 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import People.Patient;
-
 public class Organ implements IOrgan, Runnable {
 
 	private Random rand = new Random();
@@ -52,12 +50,18 @@ public class Organ implements IOrgan, Runnable {
 		timer.schedule(new TimerTask() {
 			public void run() {
 				lifeCycleOrgan();
-				System.out.println(getName() + " est dans l'état : " + getState() + "\n\n");
+				//System.out.println(getName() + " est dans l'état : " + getState() + "\n\n");
 				if (getState() == Organ.ROTTEN) {
 					timer.cancel();
 				}
 			}
 		}, 0, 1000);
-
 	}
+
+	@Override
+	public String toString() {
+		return "Organ [name=" + String.format("%8s", name) + "\tstate=" + state + "]";
+	}
+	
+	
 }

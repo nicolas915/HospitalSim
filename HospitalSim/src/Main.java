@@ -1,49 +1,27 @@
-import java.util.ArrayList;
-import java.util.Random;
-
-import Organ.Organ;
-import Organ.OrganDispatcher;
-import Organ.OrganGenerator;
-import People.Patient;
-import People.PatientGenerator;
+import DeathHandler.OrgansLifeCycle;
+import DeathHandler.PatientsLifeCycle;
 
 public class Main {
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 
-        System.out.println("Hello world!");
-        Random rand = new Random();
+		System.out.println("Hello world!");
+
+		PatientsLifeCycle patientsLifeCycle = new PatientsLifeCycle();
+		OrgansLifeCycle organsLifeCycle = new OrgansLifeCycle();
+
+
+		Thread t1;
+        t1 = new Thread(new PatientsLifeCycle());
+        t1.start();
         
-        PatientGenerator pg = new PatientGenerator();
-        OrganGenerator og = new OrganGenerator();
-        
-        OrganDispatcher od = new OrganDispatcher();
-        
-        ArrayList<Patient> listPatient = new ArrayList<>();
-        ArrayList<Organ> listOrgan = new ArrayList<>();
-        
-        while(true) {
-        	if(listPatient.size() < 5) {
-        		Patient buffer = (Patient)pg.createPatient("euuuuh" + rand.nextInt(100));
-        		listPatient.add(buffer);
-        		buffer.run();
-        	}
-        	for(int i = 0; i < listPatient.size(); i++) {
-        		if(listPatient.get(i).getVitalSign() == Patient.DEAD) {
-        			listPatient.remove(i--);
-        			
-        			Organ buffer = (Organ) og.createOrgan();
-        			listOrgan.add(buffer);
-        			buffer.run();
-        		}
-        	}
-        	
-        	
-        	
-        	for(int i = 0; i < listOrgan.size(); i++) {
-        		if(listOrgan.get(i).getState() == Organ.ROTTEN) {
-        			listOrgan.remove(i--);
-        		}
-        	}
+        Thread t2;
+        t2 = new Thread(new OrgansLifeCycle());
+        t2.start();
+
+        for(int i=0; i < 10; i++) {
+        	System.out.println("created a patient");
+        	patientsLifeCycle.createPatient();
         }
-    }
+        	
+	}
 }
