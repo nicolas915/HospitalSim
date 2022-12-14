@@ -2,21 +2,22 @@ package Organ;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.sql.Ref;
 import java.util.ArrayList;
 
 import People.IPatient;
+import People.ListOfPeople;
 
 
 public class OrganDispatcher implements PropertyChangeListener {
 	private static OrganDispatcher instance;
 	
-	private ArrayList<IPatient> listOfPeople;
-	private ArrayList<IOrgan> listOfOrgans;
-
+	private ListOfOrgans listOfOrgans;
+	private	ListOfPeople listOfPeople;
     
 	private OrganDispatcher() {
-    	listOfPeople = new ArrayList<>();
-    	listOfOrgans = new ArrayList<>();
+    	listOfPeople = ListOfPeople.getInstance();
+    	listOfOrgans = ListOfOrgans.getInstance();
 	}
 	
 	public static OrganDispatcher getInstance() {
@@ -25,41 +26,30 @@ public class OrganDispatcher implements PropertyChangeListener {
 		}
 		return instance;
 	}
-
-    public void newPatient(IPatient patient) {
-    	listOfPeople.add(patient);
-    	refresh();
-    }
-    
-    public void removePatient(IPatient patient) {
-    	listOfPeople.remove(patient);
-    	refresh();
-    }
-    
-    public void newOrgan(IOrgan organ) {
-		listOfOrgans.add(organ);
-		refresh();
-	}
-    
-    public void removeOrgan(IOrgan organ) {
-    	listOfOrgans.remove(organ);
-    	refresh();
-    }
     
     public void refresh() {
-    	for(int i = 0; i < listOfOrgans.size(); i++) {
-    		System.out.println(listOfOrgans.get(i));
+    	for(int i = 0; i < listOfOrgans.getSize(); i++) {
+    		System.out.println(listOfOrgans.getOrgan(i));
     	}
-    	
-    	for(int i = 0; i < listOfPeople.size(); i++) {
-    		System.out.println(listOfPeople.get(i));
+    	System.out.println("\n");
+    	for(int i = 0; i < listOfPeople.getSize(); i++) {
+    		System.out.println(listOfPeople.getPatient(i));
     	}
     	
     	System.out.println("\n\n\n");
     }
 
-	public void propertyChange(PropertyChangeEvent evt){
-		this.newOrgan((IOrgan) evt.getNewValue());
+	public void propertyChange(PropertyChangeEvent evt) {
+		listOfOrgans.addOrgan((IOrgan) evt.getNewValue());
+	}
+    
+    public void dispatch() {
+    	
+    }
+
+	public void update() {
+		refresh();
+		dispatch();
 	}
 	
 }

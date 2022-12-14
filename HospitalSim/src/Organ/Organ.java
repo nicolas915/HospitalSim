@@ -5,12 +5,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Organ implements IOrgan, Runnable {
-
+	private static OrganDispatcher organDispatcher = OrganDispatcher.getInstance();
+	
 	private Random rand = new Random();
 	public static final int FRESH = 0;
 	public static final int DAMAGED = 1;
 	public static final int ROTTEN = 2;
-
+	
 	private String name;
 	private int state;
 
@@ -35,17 +36,20 @@ public class Organ implements IOrgan, Runnable {
 		if (this.state == DAMAGED) {
 			if (rand.nextInt(10) > 7) {
 				this.setState(ROTTEN);
+				organDispatcher.update();
 			}
 		}
 		if (this.state == FRESH) {
 			if (rand.nextInt(10) > 7) {
 				this.setState(DAMAGED);
+				organDispatcher.update();
 			}
 		}
 	}
 
 	@Override
 	public void run() {
+		organDispatcher.update();
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -53,6 +57,7 @@ public class Organ implements IOrgan, Runnable {
 				//System.out.println(getName() + " est dans l'état : " + getState() + "\n\n");
 				if (getState() == Organ.ROTTEN) {
 					timer.cancel();
+					organDispatcher.update();
 				}
 			}
 		}, 0, 1000);

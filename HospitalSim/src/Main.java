@@ -3,12 +3,10 @@ import DeathHandler.PatientsLifeCycle;
 
 public class Main {
 	public static void main(String[] args) {
-
 		System.out.println("Hello world!");
 
 		PatientsLifeCycle patientsLifeCycle = new PatientsLifeCycle();
 		OrgansLifeCycle organsLifeCycle = new OrgansLifeCycle();
-
 
 		Thread t1;
         t1 = new Thread(new PatientsLifeCycle());
@@ -22,6 +20,5 @@ public class Main {
         	System.out.println("created a patient");
         	patientsLifeCycle.createPatient();
         }
-        	
 	}
 }
