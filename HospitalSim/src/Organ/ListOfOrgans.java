@@ -37,6 +37,10 @@ public class ListOfOrgans {
 	public IOrgan getOrgan(int i) {
 		return allOrgans.get(i);
 	}
+	
+	public ArrayList<IOrgan> getAllOrgans() {
+		return allOrgans;
+	}
 
 	public Semaphore getSemaphore() {
 		return semaphore;

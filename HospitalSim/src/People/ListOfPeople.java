@@ -37,6 +37,10 @@ public class ListOfPeople {
 	public IPatient getPatient(int i) {
 		return allPeople.get(i);
 	}
+	
+	public ArrayList<IPatient> getAllPeople() {
+		return allPeople;
+	}
 
 	public Semaphore getSemaphore() {
 		return semaphore;
