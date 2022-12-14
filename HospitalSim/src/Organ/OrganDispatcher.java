@@ -1,11 +1,13 @@
 package Organ;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 import People.IPatient;
 
 
-public class OrganDispatcher{
+public class OrganDispatcher implements PropertyChangeListener {
 	private static OrganDispatcher instance;
 	
 	private ArrayList<IPatient> listOfPeople;
@@ -55,5 +57,9 @@ public class OrganDispatcher{
     	
     	System.out.println("\n\n\n");
     }
+
+	public void propertyChange(PropertyChangeEvent evt){
+		this.newOrgan((IOrgan) evt.getNewValue());
+	}
 	
 }
