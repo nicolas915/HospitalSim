@@ -9,7 +9,7 @@ import People.Patient;
 import People.PatientGenerator;
 
 public class PatientsLifeCycle implements Runnable {
-
+	
 	private ListOfPeople listOfPeople;
 	private OrgansLifeCycle organsLifeCycle;
 

@@ -5,8 +5,11 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Patient implements IPatient, Runnable {
+import Organ.OrganDispatcher;
 
+public class Patient implements IPatient, Runnable {
+	private static OrganDispatcher organDispatcher = OrganDispatcher.getInstance();
+	
 	private Random rand = new Random();
 	public static final int HEALED = 0;
 	public static final int LIGHTILL = 1;
@@ -55,22 +58,26 @@ public class Patient implements IPatient, Runnable {
 		if (this.vitalSign == HIGHILL) {
 			if (rand.nextInt(10) > 7) {
 				this.setVitalSign(DEAD);
+				organDispatcher.update();
 			}
 		}
 		if (this.vitalSign == MEDIUMILL) {
 			if (rand.nextInt(10) > 7) {
 				this.setVitalSign(HIGHILL);
+				organDispatcher.update();
 			}
 		}
 		if (this.vitalSign == LIGHTILL) {
 			if (rand.nextInt(10) > 7) {
 				this.setVitalSign(MEDIUMILL);
+				organDispatcher.update();
 			}
 		}
 	}
 
 	@Override
 	public void run() {
+		organDispatcher.update();
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -78,6 +85,7 @@ public class Patient implements IPatient, Runnable {
 				//System.out.println(getName() + "\nEtat de santé : " + getVitalSign() + "\n\n");
 				if (getVitalSign() == Patient.DEAD) {
 					timer.cancel();
+					organDispatcher.update();
 				}
 			}
 		}, 0, 2000);
@@ -85,8 +93,6 @@ public class Patient implements IPatient, Runnable {
 
 	@Override
 	public String toString() {
-		return "Patient [\tname=" + String.format("%12s", name) + "\twaitedOrgan=" + waitedOrgan + "]";
+		return "Patient [name=" + name + ", waitedOrgan=" + waitedOrgan + ", vitalSign=" + vitalSign + "]";
 	}
-	
-	
 }
