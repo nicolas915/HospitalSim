@@ -1,5 +1,7 @@
 package People;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
@@ -9,7 +11,7 @@ import Organ.OrganDispatcher;
 
 public class Patient implements IPatient, Runnable {
 	private static OrganDispatcher organDispatcher = OrganDispatcher.getInstance();
-	
+	private PropertyChangeSupport support;
 	private Random rand = new Random();
 	public static final int HEALED = 0;
 	public static final int LIGHTILL = 1;
@@ -24,10 +26,13 @@ public class Patient implements IPatient, Runnable {
 
 	private boolean exit = false;
 
-	public Patient(String name, String waitedOrgan, int vitalSign) {
+	public Patient(String name, String waitedOrgan, int vitalSign, PropertyChangeListener pcl) {
+		support = new PropertyChangeSupport(this);
+		support.addPropertyChangeListener(pcl);
 		this.name = name;
 		this.waitedOrgan = waitedOrgan;
 		this.vitalSign = vitalSign;
+		support.firePropertyChange("addp", null, this);
 	}
 
 	public String getName() {
@@ -54,23 +59,32 @@ public class Patient implements IPatient, Runnable {
 		this.contactList.put(relation, contact);
 	}
 
+	public void addPropertyChangeListener(PropertyChangeListener pcl){
+		support.addPropertyChangeListener(pcl);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener pcl){
+		support.removePropertyChangeListener(pcl);
+	}
+
 	public void lifeCyclePatient() {
 		if (this.vitalSign == HIGHILL) {
 			if (rand.nextInt(10) > 7) {
 				this.setVitalSign(DEAD);
-				organDispatcher.update();
+				support.firePropertyChange("removep", null, this);
+				//organDispatcher.update();
 			}
 		}
 		if (this.vitalSign == MEDIUMILL) {
 			if (rand.nextInt(10) > 7) {
 				this.setVitalSign(HIGHILL);
-				organDispatcher.update();
+				//organDispatcher.update();
 			}
 		}
 		if (this.vitalSign == LIGHTILL) {
 			if (rand.nextInt(10) > 7) {
 				this.setVitalSign(MEDIUMILL);
-				organDispatcher.update();
+				//organDispatcher.update();
 			}
 		}
 	}

@@ -1,11 +1,15 @@
 package Organ;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Organ implements IOrgan, Runnable {
 	private static OrganDispatcher organDispatcher = OrganDispatcher.getInstance();
+
+	private PropertyChangeSupport support;
 	
 	private Random rand = new Random();
 	public static final int FRESH = 0;
@@ -15,9 +19,12 @@ public class Organ implements IOrgan, Runnable {
 	private String name;
 	private int state;
 
-	public Organ(String name, int state) {
+	public Organ(String name, int state, PropertyChangeListener pcl) {
+		support = new PropertyChangeSupport(this);
+		support.addPropertyChangeListener(pcl);
 		this.name = name;
 		this.state = state;
+		support.firePropertyChange("addo", null, this);
 	}
 
 	public String getName() {
@@ -32,17 +39,26 @@ public class Organ implements IOrgan, Runnable {
 		this.state = state;
 	}
 
+	public void addPropertyChangeListener(PropertyChangeListener pcl){
+		support.addPropertyChangeListener(pcl);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener pcl){
+		support.removePropertyChangeListener(pcl);
+	}
+
 	public void lifeCycleOrgan() {
 		if (this.state == DAMAGED) {
 			if (rand.nextInt(10) > 7) {
 				this.setState(ROTTEN);
-				organDispatcher.update();
+				support.firePropertyChange("removeo", null, this);
+				//organDispatcher.update();
 			}
 		}
 		if (this.state == FRESH) {
 			if (rand.nextInt(10) > 7) {
 				this.setState(DAMAGED);
-				organDispatcher.update();
+				//organDispatcher.update();
 			}
 		}
 	}

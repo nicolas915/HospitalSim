@@ -40,7 +40,22 @@ public class OrganDispatcher implements PropertyChangeListener {
     }
 
 	public void propertyChange(PropertyChangeEvent evt) {
-		listOfOrgans.addOrgan((IOrgan) evt.getNewValue());
+		if(evt.getPropertyName().substring(0,3) == "add"){
+			if(evt.getPropertyName().substring(3) == "o"){
+				listOfOrgans.addOrgan((IOrgan) evt.getNewValue());
+			}
+			if(evt.getPropertyName().substring(3) == "p"){
+				listOfPeople.addPatient((IPatient) evt.getNewValue());
+			}
+		}
+		else if(evt.getPropertyName().substring(0,6) == "remove"){
+			if(evt.getPropertyName().substring(6) == "o"){
+				listOfOrgans.removeOrgan((IOrgan) evt.getNewValue());
+			}
+			if(evt.getPropertyName().substring(6) == "p"){
+				listOfPeople.removePatient((IPatient) evt.getNewValue());
+			}
+		}
 	}
     
     public void dispatch() {
