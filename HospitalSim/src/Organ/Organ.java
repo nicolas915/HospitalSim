@@ -7,8 +7,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Organ implements IOrgan, Runnable {
-	private static OrganDispatcher organDispatcher = OrganDispatcher.getInstance();
-
 	private PropertyChangeSupport support;
 	
 	private Random rand = new Random();
@@ -25,6 +23,7 @@ public class Organ implements IOrgan, Runnable {
 		this.name = name;
 		this.state = state;
 		support.firePropertyChange("addo", null, this);
+		run();
 	}
 
 	public String getName() {
@@ -65,7 +64,6 @@ public class Organ implements IOrgan, Runnable {
 
 	@Override
 	public void run() {
-		organDispatcher.update();
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -73,7 +71,6 @@ public class Organ implements IOrgan, Runnable {
 				//System.out.println(getName() + " est dans l'état : " + getState() + "\n\n");
 				if (getState() == Organ.ROTTEN) {
 					timer.cancel();
-					organDispatcher.update();
 				}
 			}
 		}, 0, 1000);

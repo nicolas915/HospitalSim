@@ -10,7 +10,6 @@ import java.util.TimerTask;
 import Organ.OrganDispatcher;
 
 public class Patient implements IPatient, Runnable {
-	private static OrganDispatcher organDispatcher = OrganDispatcher.getInstance();
 	private PropertyChangeSupport support;
 	private Random rand = new Random();
 	public static final int HEALED = 0;
@@ -33,6 +32,7 @@ public class Patient implements IPatient, Runnable {
 		this.waitedOrgan = waitedOrgan;
 		this.vitalSign = vitalSign;
 		support.firePropertyChange("addp", null, this);
+		run();
 	}
 
 	public String getName() {
@@ -91,7 +91,6 @@ public class Patient implements IPatient, Runnable {
 
 	@Override
 	public void run() {
-		organDispatcher.update();
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -99,7 +98,6 @@ public class Patient implements IPatient, Runnable {
 				//System.out.println(getName() + "\nEtat de santé : " + getVitalSign() + "\n\n");
 				if (getVitalSign() == Patient.DEAD) {
 					timer.cancel();
-					organDispatcher.update();
 				}
 			}
 		}, 0, 2000);

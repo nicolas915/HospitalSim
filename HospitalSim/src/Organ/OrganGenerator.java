@@ -15,7 +15,7 @@ public class OrganGenerator{
     }
 
     public IOrgan createOrgan(){
-        IOrgan o = new Organ(organ[rand.nextInt(organ.length)], rand.nextInt(0,3), organDispatcher);
+        IOrgan o = new Organ(organ[rand.nextInt(organ.length)], rand.nextInt(0,2), organDispatcher);
         return o;
     }
 }

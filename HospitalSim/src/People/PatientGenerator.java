@@ -28,7 +28,7 @@ public class PatientGenerator {
     }
 
     public IPatient createPatient(String name){
-        IPatient p = new Patient(name, failingOrgan[rand.nextInt(failingOrgan.length)], rand.nextInt(1,4), organDispatcher);
+        IPatient p = new Patient(name, failingOrgan[rand.nextInt(failingOrgan.length)], rand.nextInt(1,3), organDispatcher);
         return p;
     }
 

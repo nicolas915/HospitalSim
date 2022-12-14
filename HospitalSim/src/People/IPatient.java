@@ -10,5 +10,4 @@ public interface IPatient {
     void setVitalSign(int vitalSign);
     void addContact(String contact, String relation);
     void lifeCyclePatient();
-
 }

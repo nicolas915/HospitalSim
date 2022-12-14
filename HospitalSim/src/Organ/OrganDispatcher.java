@@ -40,27 +40,41 @@ public class OrganDispatcher implements PropertyChangeListener {
 	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().substring(0, 3) == "add") {
-			if (evt.getPropertyName().substring(3) == "o") {
-				listOfOrgans.addOrgan((IOrgan) evt.getNewValue());
+		if (evt.getPropertyName().substring(0, 3).equals("add")) {
+			if (evt.getPropertyName().substring(3).equals("o")) {
+				if (listOfOrgans.getSemaphore().tryAcquire()) {
+					listOfOrgans.addOrgan((IOrgan) evt.getNewValue());
+					listOfOrgans.getSemaphore().release();
+				}
 			}
-			if (evt.getPropertyName().substring(3) == "p") {
-				listOfPeople.addPatient((IPatient) evt.getNewValue());
+			if (evt.getPropertyName().substring(3).equals("p")) {
+				if (listOfPeople.getSemaphore().tryAcquire()) {
+					listOfPeople.addPatient((IPatient) evt.getNewValue());
+					listOfPeople.getSemaphore().release();
+				}
 			}
-		} else if (evt.getPropertyName().substring(0, 6) == "remove") {
-			if (evt.getPropertyName().substring(6) == "o") {
-				listOfOrgans.removeOrgan((IOrgan) evt.getNewValue());
+		} else if (evt.getPropertyName().substring(0, 6).equals("remove")) {
+			if (evt.getPropertyName().substring(6).equals("o")) {
+				if (listOfOrgans.getSemaphore().tryAcquire()) {
+					listOfOrgans.removeOrgan((IOrgan) evt.getNewValue());
+					listOfOrgans.getSemaphore().release();
+				}
 			}
-			if (evt.getPropertyName().substring(6) == "p") {
-				listOfPeople.removePatient((IPatient) evt.getNewValue());
+			if (evt.getPropertyName().substring(6).equals("p")) {
+				if (listOfPeople.getSemaphore().tryAcquire()) {
+					listOfPeople.removePatient((IPatient) evt.getNewValue());
+					listOfPeople.getSemaphore().release();
+				}
 			}
 		}
+		update();
 	}
 
 	public void dispatch() {
 		for (IPatient patient : listOfPeople.getAllPeople()) {
 			for (IOrgan organ : listOfOrgans.getAllOrgans()) {
 				if (patient.getWaitedOrgan().equals(organ.getName())) {
+					System.out.println(organ.toString() + "saved : " + patient.toString());
 					patient.setVitalSign(Patient.HEALED);
 					listOfOrgans.removeOrgan(organ);
 					listOfPeople.removePatient(patient);
