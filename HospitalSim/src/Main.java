@@ -1,6 +1,5 @@
 import Organ.OrganDispatcher;
 import Organ.OrganGenerator;
-import People.Patient;
 import People.PatientGenerator;
 
 public class Main {
